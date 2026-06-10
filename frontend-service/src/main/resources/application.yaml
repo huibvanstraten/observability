@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: frontend-service
+
+logging:
+  pattern:
+    console: "%d{HH:mm:ss.SSS} %-5level [traceId=%X{trace_id:-none}, spanId=%X{span_id:-none}] %logger{36} - %msg%n"

@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: backend-service
+  kafka:
+    consumer:
+      group-id: backend-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "com.hvs.backendservice.*"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+logging:
+  pattern:
+    console: "%d{HH:mm:ss.SSS} %-5level [traceId=%X{trace_id:-none}, spanId=%X{span_id:-none}] %logger{36} - %msg%n"
