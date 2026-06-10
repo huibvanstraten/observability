@@ -16,3 +16,15 @@ spring:
 logging:
   pattern:
     console: "%d{HH:mm:ss.SSS} %-5level [traceId=%X{trace_id:-none}, spanId=%X{span_id:-none}] %logger{36} - %msg%n"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics
+  otlp:
+    metrics:
+      export:
+        enabled: true
+        url: http://apm-server:8200/v1/metrics
+        step: 10s

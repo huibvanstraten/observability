@@ -1,7 +1,7 @@
 package com.hvs.backendservice.controller
 
 import com.hvs.backendservice.service.JpaDemoService
-import com.hvs.backendservice.service.ObservabilityDemoService
+import com.hvs.backendservice.service.SimpleDemoService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/demo")
 class ObservabilityDemoController(
     private val jpaDemoService: JpaDemoService,
-    private val demoService: ObservabilityDemoService,
+    private val demoService: SimpleDemoService,
 ) {
     @GetMapping("/jpa")
     fun jpa() =

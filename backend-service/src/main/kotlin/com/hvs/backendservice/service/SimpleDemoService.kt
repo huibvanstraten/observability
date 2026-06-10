@@ -9,7 +9,7 @@ import org.springframework.web.client.body
 import kotlin.use
 
 @Service
-class ObservabilityDemoService(
+class SimpleDemoService(
     private val restClient: RestClient,
 ) {
 

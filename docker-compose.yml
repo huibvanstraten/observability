@@ -17,6 +17,9 @@ services:
     image: docker.elastic.co/kibana/kibana:9.4.2
     environment:
       ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+      SERVER_PUBLICBASEURL: http://localhost:5601
+      XPACK_ACTIONS_ENABLED: true
+      XPACK_ACTIONS_ENABLEDACTIONTYPES: '[".email"]'
     ports:
       - "5601:5601"
     depends_on:
@@ -71,21 +74,23 @@ services:
         JAR_FILE: backend-service/build/libs/backend-service-0.0.1-SNAPSHOT.jar
     environment:
       - SERVER_PORT=8081
-      - OTEL_SERVICE_NAME=backend-service
-      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://apm-server:8200/v1/traces
-      - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://apm-server:8200/v1/metrics
-      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
-      - OTEL_TRACES_EXPORTER=otlp
-      - OTEL_METRICS_EXPORTER=otlp
-      - OTEL_LOGS_EXPORTER=otlp
-      - OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://apm-server:8200/v1/logs
-      - OTEL_INSTRUMENTATION_LOGS_MDC_ENABLED=true
-      - OTEL_INSTRUMENTATION_LOGBACK_MDC_ENABLED=true
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/observability
       - SPRING_DATASOURCE_USERNAME=observability
       - SPRING_DATASOURCE_PASSWORD=observability
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - OTEL_SERVICE_NAME=backend-service
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_METRICS_EXPORTER=otlp
+      - OTEL_LOGS_EXPORTER=otlp
+      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://apm-server:8200/v1/traces
+      - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://apm-server:8200/v1/metrics
+      - OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://apm-server:8200/v1/logs
+      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      - OTEL_INSTRUMENTATION_LOGBACK_MDC_ENABLED=true
+      - OTEL_METRIC_EXPORT_INTERVAL=5000
+      - OTEL_TRACES_SAMPLER=parentbased_traceidratio
+      - OTEL_TRACES_SAMPLER_ARG=0.1
     ports:
       - "8081:8081"
     depends_on:
@@ -102,15 +107,16 @@ services:
       - SERVER_PORT=8080
       - BACKEND_BASE_URL=http://backend-service:8081
       - OTEL_SERVICE_NAME=frontend-service
-      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://apm-server:8200/v1/traces
-      - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://apm-server:8200/v1/metrics
-      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
       - OTEL_TRACES_EXPORTER=otlp
       - OTEL_METRICS_EXPORTER=otlp
       - OTEL_LOGS_EXPORTER=otlp
+      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://apm-server:8200/v1/traces
+      - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://apm-server:8200/v1/metrics
       - OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://apm-server:8200/v1/logs
-      - OTEL_INSTRUMENTATION_LOGS_MDC_ENABLED=true
+      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
       - OTEL_INSTRUMENTATION_LOGBACK_MDC_ENABLED=true
+      - OTEL_TRACES_SAMPLER=parentbased_traceidratio
+      - OTEL_TRACES_SAMPLER_ARG=0.1
     ports:
       - "8080:8080"
     depends_on:
